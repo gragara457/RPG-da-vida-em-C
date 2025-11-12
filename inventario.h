@@ -38,7 +38,7 @@ void removerItem(NoLista** lista_head, const char* nome_item);
  * @brief Exibe todos os itens no inventário.
  * @req [Conceito: Lista Ligada (Percorrer)]
  */
-void exibirInventARIO(NoLista* lista_head);
+void exibirInventario(NoLista* lista_head);
 
 /**
  * @brief Libera toda a memória alocada para a lista.

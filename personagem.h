@@ -8,6 +8,7 @@ typedef struct {
     int felicidade;
     int dinheiro;
     int ano_atual;
+    int rodadas_sem_dinheiro; // Contador para game over
 } Personagem;
 
 // --- Protótipos das Funções (O "Contrato" do Aluno 1) ---

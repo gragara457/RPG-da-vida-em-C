@@ -1,0 +1,55 @@
+=====================================
+    RPG DA VIDA EM C - COMO JOGAR
+=====================================
+
+COMO INICIAR O JOGO:
+--------------------
+1. De um duplo clique no arquivo "jogar.bat"
+   OU
+2. Abra o PowerShell nesta pasta e digite: .\rpg_da_vida.exe
+
+OBJETIVO DO JOGO:
+-----------------
+Viva a vida mais longa e feliz possível, tomando decisões
+importantes em cada fase da vida!
+
+COMO FUNCIONA:
+--------------
+- O jogo começa aos 1 ano de idade
+- A cada rodada, você avança 5 anos
+- Você perde 5 de saúde a cada ciclo (envelhecimento)
+- Tome decisões baseadas na sua idade atual
+
+FASES DA VIDA:
+--------------
+- 1-5 anos: INFANCIA (escolhas dos pais)
+- 6-10 anos: ESCOLA PRIMARIA (comportamento escolar)
+- 11-15 anos: ADOLESCENCIA (ensino médio)
+- 16-20 anos: INICIO DA VIDA ADULTA (carreira)
+- 21-40 anos: CARREIRA EM DESENVOLVIMENTO
+- 41-60 anos: MEIA-IDADE
+- 61+ anos: TERCEIRA IDADE
+
+CONDIÇÕES DE GAME OVER:
+-----------------------
+O jogo termina se:
+- Saúde chegar a 0
+- Felicidade chegar a 0
+- Ficar sem dinheiro (R$ 0 ou menos) por 2 rodadas consecutivas
+- Chegar aos 80 anos de idade
+
+VALORES INICIAIS:
+----------------
+- Saúde: 100%
+- Felicidade: 100%
+- Dinheiro: R$ 1000
+- Idade: 1 ano
+
+DICAS:
+------
+- Equilibre saúde, felicidade e dinheiro
+- Algumas escolhas custam dinheiro mas dão felicidade
+- Outras dão dinheiro mas reduzem saúde
+- Pense no longo prazo!
+
+Boa sorte e divirta-se! :)
