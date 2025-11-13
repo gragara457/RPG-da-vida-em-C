@@ -26,7 +26,7 @@ if git ls-remote --heads origin | grep -q "refs/heads/$BRANCH_NAME"; then
     echo ""
     
     # Perguntar confirmação
-    read -p "Deseja deletar a branch remota '$BRANCH_NAME'? (s/N): " -n 1 -r
+    read -p "Deseja deletar a branch remota '$BRANCH_NAME'? (s/y/N): " -n 1 -r
     echo ""
     
     if [[ $REPLY =~ ^[SsYy]$ ]]; then
