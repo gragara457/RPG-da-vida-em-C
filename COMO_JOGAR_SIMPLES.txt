@@ -1,0 +1,41 @@
+=====================================
+    RPG DA VIDA EM C - VERSÃO SIMPLES
+=====================================
+
+COMO EXECUTAR:
+--------------
+1. Duplo clique em "rpg_simples.exe"
+   OU
+2. No terminal: .\rpg_simples.exe
+
+OBJETIVO:
+---------
+Viva o máximo de tempo possível tomando decisões que
+afetam sua saúde e felicidade.
+
+COMO JOGAR:
+-----------
+- Digite seu nome no início
+- Escolha uma das 4 opções a cada rodada:
+  1. Trabalhar (perde saúde, ganha experiência)
+  2. Descansar (ganha saúde e felicidade)  
+  3. Usar item (recupera saúde/felicidade)
+  0. Sair do jogo
+
+- A cada rodada você envelhece 5 anos
+- Sua saúde diminui naturalmente com a idade
+
+CONDIÇÕES DE FIM:
+----------------
+- Saúde chegar a 0 ou menos (MORTE)
+- Chegar aos 80 anos (VITÓRIA!)
+- Escolher sair (opção 0)
+
+CONCEITOS PROGRAMAÇÃO:
+---------------------
+✅ 3 STRUCTS: Personagem, Item, Jogo  
+✅ 3 FUNÇÕES: criarJogo(), jogarRodada(), finalizarJogo()
+✅ 3 PONTEIROS: Jogo*, acesso ->, free()
+
+ARQUIVO: rpg_simples.c (código em arquivo único)
+=====================================
