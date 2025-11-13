@@ -1,0 +1,132 @@
+=====================================
+ RELATÓRIO DE CONCEITOS UTILIZADOS
+=====================================
+
+📋 ANÁLISE DO PROJETO RPG DA VIDA EM C
+=====================================
+
+✅ 1. STRUCTS (3+ confirmados)
+==============================
+
+🔹 Struct Personagem (personagem.h):
+   - char nome[50]
+   - int saude
+   - int felicidade  
+   - int dinheiro
+   - int ano_atual
+   - int rodadas_sem_dinheiro
+   - int casado
+   - int filhos
+
+🔹 Struct ItemVida (inventario.h):
+   - char nome[100]
+   - int valor
+   - char tipo[50] 
+   - int efeito_saude
+   - int efeito_felicidade
+   - int efeito_dinheiro
+
+🔹 Struct NoLista (inventario.h):
+   - ItemVida item
+   - struct NoLista* proximo
+
+TOTAL DE STRUCTS: ✅ 3 (requisito atendido)
+
+✅ 2. FUNÇÕES (3+ confirmados)  
+=============================
+
+📂 ARQUIVO: main.c
+   - main()
+
+📂 ARQUIVO: personagem.c
+   - criarPersonagem()
+   - liberarPersonagem() 
+   - exibirStatus()
+   - aplicarEvento()
+   - jogoContinua()
+
+📂 ARQUIVO: inventario.c
+   - adicionarItem()
+   - removerItem()
+   - exibirInventario()
+   - liberarInventario()
+   - criarItem()
+   - usarItem()
+   - adicionarItensIniciais()
+
+📂 ARQUIVO: arvore_decisao.c
+   - exibirMenuDecisao()
+   - decisaoInfancia()
+   - decisaoEscolaPrimaria()
+   - decisaoAdolescencia()
+   - decisaoCarreira()
+   - decisaoCarreiraMedia()
+   - decisaoMeiaIdadeInicial()
+   - decisaoMeiaIdadeMedia()
+   - decisaoMeiaIdadeMadura()
+   - decisaoMeiaIdadeFinal()
+   - decisaoTerceiraIdade()
+   - decisaoCasamento()
+   - decisaoFilhos()
+   - gerenciarInventario()
+
+TOTAL DE FUNÇÕES: ✅ 20+ (requisito atendido)
+
+✅ 3. PONTEIROS (3+ confirmados)
+===============================
+
+🔹 DECLARAÇÃO DE PONTEIROS:
+   - Personagem* jogador
+   - NoLista* inventario  
+   - struct NoLista* proximo
+
+🔹 ACESSO VIA PONTEIRO (->):
+   - jogador->nome
+   - jogador->saude
+   - jogador->felicidade
+   - jogador->dinheiro
+   - jogador->ano_atual
+   - jogador->filhos
+   - atual->item
+   - atual->proximo
+
+🔹 PASSAGEM POR REFERÊNCIA (&):
+   - &inventario
+   - &lista_head
+   - &opcao (scanf)
+
+🔹 ALOCAÇÃO DINÂMICA:
+   - malloc(sizeof(Personagem))
+   - malloc(sizeof(NoLista))
+   - free(jogador)
+   - free(atual)
+
+TOTAL DE USOS DE PONTEIROS: ✅ 15+ (requisito atendido)
+
+=====================================
+📊 RESUMO FINAL
+=====================================
+
+✅ STRUCTS: 3 definidas, usadas extensivamente
+✅ FUNÇÕES: 20+ implementadas em arquitetura modular  
+✅ PONTEIROS: 15+ usos diferentes (acesso, referência, alocação)
+
+🎯 REQUISITOS ATENDIDOS:
+   ✓ Pelo menos 3 structs
+   ✓ Pelo menos 3 funções
+   ✓ Pelo menos 3 usos de ponteiros
+
+🏗️ ARQUITETURA MODULAR:
+   - main.c: Controle principal
+   - personagem.c/h: Estrutura do personagem
+   - inventario.c/h: Sistema de itens (lista ligada)
+   - arvore_decisao.c/h: Lógica de decisões
+
+💡 CONCEITOS AVANÇADOS UTILIZADOS:
+   - Alocação dinâmica (malloc/free)
+   - Lista ligada (estrutura de dados)
+   - Passagem por referência
+   - Modularização de código
+   - Sistema de ponteiros para structs
+
+=====================================

@@ -4,11 +4,14 @@
 // --- Definição da Estrutura Principal ---
 // Define a estrutura de dados central do jogo.
 typedef struct {
+    char nome[50]; // Nome do personagem
     int saude;
     int felicidade;
     int dinheiro;
     int ano_atual;
     int rodadas_sem_dinheiro; // Contador para game over
+    int casado; // 0 = solteiro, 1 = casado
+    int filhos; // Número de filhos
 } Personagem;
 
 // --- Protótipos das Funções (O "Contrato" do Aluno 1) ---

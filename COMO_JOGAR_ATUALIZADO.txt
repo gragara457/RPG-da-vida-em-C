@@ -1,0 +1,83 @@
+=====================================
+    RPG DA VIDA EM C - COMO JOGAR
+=====================================
+
+COMO INICIAR O JOGO:
+--------------------
+1. De um duplo clique no arquivo "jogar.bat"
+   OU
+2. Abra o PowerShell nesta pasta e digite: .\rpg_da_vida.exe
+
+OBJETIVO DO JOGO:
+-----------------
+Viva a vida mais longa e feliz possível, tomando decisões
+importantes em cada fase da vida!
+
+COMO FUNCIONA:
+--------------
+- O jogo começa aos 1 ano de idade
+- Você escolhe o nome do seu personagem no início
+- A cada rodada, você avança 5 anos
+- Você perde saúde gradualmente com a idade
+- Tome decisões baseadas na sua idade atual
+
+FASES DA VIDA:
+--------------
+- 1-5 anos: INFÂNCIA (escolhas dos pais)
+- 6-10 anos: ESCOLA PRIMÁRIA (comportamento escolar)
+- 11-15 anos: ADOLESCÊNCIA (ensino médio)
+- 16-20 anos: INÍCIO DA VIDA ADULTA (carreira)
+- 21-40 anos: RELACIONAMENTOS, CASAMENTO E FILHOS
+- 41-60 anos: MEIA-IDADE
+- 61+ anos: TERCEIRA IDADE
+
+OPÇÕES ESPECIAIS:
+-----------------
+- 0: Encerrar o jogo a qualquer momento
+- 5: Acessar inventário e usar itens
+
+SISTEMA DE INVENTÁRIO:
+---------------------
+- Você começa com alguns itens básicos
+- Itens podem restaurar saúde, felicidade ou dinheiro
+- Itens consumíveis desaparecem após o uso
+- Acesse o inventário digitando 5 em qualquer decisão
+
+CONDIÇÕES DE GAME OVER:
+-----------------------
+O jogo termina se:
+- Saúde chegar a 0 (MORTE)
+- Felicidade chegar a 5 ou menos (DEPRESSÃO)
+- Ficar com dívidas maiores que R$ 5000 (FALÊNCIA)
+- Ficar sem dinheiro por 5 rodadas consecutivas (POBREZA EXTREMA)
+- Saúde muito baixa + idade avançada (65+)
+- Solidão extrema + tristeza + idade avançada (50+)
+- Chegar aos 80 anos de idade (LONGEVIDADE - VITÓRIA!)
+
+VALORES INICIAIS:
+----------------
+- Saúde: 100%
+- Felicidade: 100%
+- Dinheiro: R$ 1000
+- Idade: 1 ano
+- Estado Civil: Solteiro
+- Filhos: 0
+
+SISTEMA DE RELACIONAMENTOS:
+---------------------------
+- Entre 21-35 anos: oportunidades de casamento
+- Entre 25-40 anos: decisões sobre ter filhos
+- Filhos custam R$ 500 por filho a cada ciclo
+- Casamento e filhos afetam felicidade e custos
+
+DICAS:
+------
+- Equilibre saúde, felicidade e dinheiro
+- Use itens do inventário quando necessário
+- Casamento e filhos trazem felicidade mas custam dinheiro
+- Algumas escolhas custam dinheiro mas dão felicidade
+- Outras dão dinheiro mas reduzem saúde
+- Pense no longo prazo!
+- Cada tipo de morte tem uma mensagem única
+
+Boa sorte e divirta-se! :)
