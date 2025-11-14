@@ -215,31 +215,3 @@ int main() {
     printf("\nObrigado por jogar!\n");
     return 0;
 } // Fim da função main
-
-/*
- * =====================================
- * RESUMO DOS CONCEITOS UTILIZADOS:
- * =====================================
- * 
- * ✅ STRUCTS (3+):
- *    - Personagem (nome, saude, felicidade, dinheiro, etc.)
- *    - ItemVida (nome, valor, tipo, efeitos)
- *    - NoLista (item + ponteiro para proximo)
- * 
- * ✅ FUNÇÕES (3+):
- *    - criarPersonagem()     - cria e aloca personagem
- *    - exibirStatus()        - exibe dados do personagem  
- *    - aplicarEvento()       - modifica atributos
- *    - jogoContinua()        - verifica condições de game over
- *    - gerenciarInventario() - interface do inventário
- *    - liberarPersonagem()   - libera memória
- *    - E MUITAS outras...
- * 
- * ✅ PONTEIROS (3+ usos):
- *    - Personagem* jogador          - ponteiro para struct
- *    - NoLista* inventario          - ponteiro para lista ligada
- *    - &inventario                  - passagem por referência
- *    - jogador->nome                - acesso via ponteiro
- *    - jogador->saude = 0           - modificação via ponteiro
- *    - E MUITOS outros usos...
- */
