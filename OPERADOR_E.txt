@@ -1,0 +1,294 @@
+=====================================
+OPERADOR & (E COMERCIAL)
+=====================================
+
+O QUE É?
+--------
+& = Operador de ENDEREÇO
+Função: Pega o ENDEREÇO de uma variável na memória
+Analógico: Em vez de passar o livro, você passa o ENDEREÇO da biblioteca
+
+Sintaxe: &variavel
+
+EXEMPLO BÁSICO:
+───────────────
+
+int x = 10;
+int* p = &x;    ← & pega o endereço de x
+                   p agora aponta para x
+
+printf("%d\n", x);   ← Mostra: 10
+printf("%p\n", &x);  ← Mostra: 0x7fff5fbff8ac (endereço em hexadecimal)
+printf("%p\n", p);   ← Mostra: 0x7fff5fbff8ac (mesmo endereço)
+
+
+=====================================
+ONDE ESTÁ SENDO USADO NO SEU CÓDIGO?
+=====================================
+
+LOCALIZAÇÃO 1: main.c linha 73
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NoLista* inventario = NULL;
+adicionarItensIniciais(&inventario);
+                      ↑
+                      & = Passa o ENDEREÇO do inventario
+
+O QUE SIGNIFICA:
+    - inventario é um ponteiro (endereço)
+    - &inventario é o endereço DESSE ponteiro
+    - Tipo: NoLista**
+
+POR QUÊ USAR &?
+    A função adicionarItensIniciais precisa MODIFICAR inventario
+    Se passasse só inventario, só copiaria o valor
+    Com &inventario, a função consegue modificar em main!
+
+
+LOCALIZAÇÃO 2: main.c linha 122
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gerenciarInventario(jogador, &inventario);
+                              ↑
+                              & = Passa o ENDEREÇO
+
+
+LOCALIZAÇÃO 3: main.c linha 146
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+while (getchar() != '\n');
+getchar();
+
+scanf(" %c", &opcao);
+         ↑
+         & = Passa o ENDEREÇO de opcao para scanf ler
+
+
+LOCALIZAÇÃO 4: main.c linhas 210-211
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+liberarInventario(&inventario);
+                  ↑
+                  & = Passa o ENDEREÇO para liberar
+                  
+liberarPersonagem(jogador);
+
+
+=====================================
+& EM DIFERENTES CONTEXTOS
+=====================================
+
+CONTEXTO 1: PASSAGEM POR REFERÊNCIA
+────────────────────────────────────
+
+Sem &:
+    int x = 10;
+    funcao(x);  ← Passa uma CÓPIA de x (valor)
+                   Se a função modifica, x em main NÃO muda!
+
+Com &:
+    int x = 10;
+    funcao(&x);  ← Passa o ENDEREÇO de x (referência)
+                    Se a função modifica, x em main MUDA!
+
+EXEMPLO NO SEU CÓDIGO:
+    
+    inventario = NULL;
+    adicionarItensIniciais(&inventario);  ← Com &
+    // Depois, inventario aponta para a lista!
+
+
+CONTEXTO 2: LEITURA COM scanf()
+─────────────────────────────────
+
+scanf(" %c", &opcao);
+            ↑
+            Precisa do ENDEREÇO para escrever o valor lido
+
+POR QUÊ? scanf() precisa MODIFICAR a variável
+    sem &, não conseguiria colocar o valor em opcao
+
+
+CONTEXTO 3: OBTER ENDEREÇO (Ponteiros)
+────────────────────────────────────────
+
+int x = 10;
+int* p = &x;  ← & cria um ponteiro para x
+
+NoLista* inventario = NULL;
+NoLista** pp = &inventario;  ← & cria ponteiro para o ponteiro
+
+
+=====================================
+& vs * (OPERADORES OPOSTOS)
+=====================================
+
+& = PEGA O ENDEREÇO
+* = ACESSA O CONTEÚDO DO ENDEREÇO
+
+int x = 10;
+int* p = &x;       ← & pega endereço de x, armazena em p
+
+printf("%d\n", x);  ← Mostra: 10 (valor de x)
+printf("%d\n", *p); ← Mostra: 10 (acessa conteúdo do endereço)
+printf("%p\n", p);  ← Mostra: 0x... (o endereço)
+
+
+ANALOGIA:
+─────────
+x = O LIVRO (valor 10)
+&x = O ENDEREÇO DA BIBLIOTECA (onde o livro está)
+p = CARTÃO COM O ENDEREÇO
+*p = IR AO ENDEREÇO E PEGAR O LIVRO
+
+
+=====================================
+FLUXO COMPLETO: & NO SEU CÓDIGO
+=====================================
+
+1. INICIALIZAÇÃO em main.c:
+   
+   NoLista* inventario = NULL;
+   
+   inventario é um ponteiro
+   inventario contém: NULL (não aponta para nada)
+   endereço de inventario: 0x7fff... (exemplo)
+
+
+2. CHAMADA COM &:
+   
+   adicionarItensIniciais(&inventario);
+   
+   Passa: o ENDEREÇO de inventario (&inventario)
+   Tipo passado: NoLista**
+   Valor passado: 0x7fff...
+
+
+3. DENTRO DA FUNÇÃO:
+   
+   void adicionarItensIniciais(NoLista** lista_head) {
+       //                              ^^
+       //                      Recebe NoLista** (ponteiro duplo)
+       
+       // *lista_head = desreferencia (acessa inventario)
+       // **lista_head = desreferencia duas vezes
+   }
+
+
+4. MODIFICAÇÃO:
+   
+   *lista_head = novo_no;
+   
+   Modifica o INVENTARIO ORIGINAL em main!
+
+
+5. RESULTADO em main:
+   
+   inventario agora aponta para a lista
+   Funcionou!
+
+
+=====================================
+REGRA PRÁTICA: QUANDO USAR &
+=====================================
+
+USE & QUANDO:
+    ✅ Quer passar uma VARIÁVEL por referência (para modificar)
+    ✅ Quer obter o ENDEREÇO de algo
+    ✅ Está usando scanf() para ler
+    ✅ Quer criar um PONTEIRO para uma variável
+    ✅ Precisa de um PONTEIRO DUPLO (**)
+
+NÃO USE & QUANDO:
+    ❌ Já tem um PONTEIRO (não precisa de &)
+    ❌ Quer passar só a CÓPIA do valor
+    ❌ Está usando printf() para mostrar
+    ❌ Está acessando um ponteiro (use * ou ->)
+
+
+=====================================
+EXEMPLOS DO SEU CÓDIGO
+=====================================
+
+EXEMPLO 1: scanf
+────────────────
+scanf(" %c", &opcao);
+         ↑
+         & NECESSÁRIO para scanf colocar o valor
+
+EXEMPLO 2: Adicionar itens
+──────────────────────────
+adicionarItensIniciais(&inventario);
+                      ↑
+                      & NECESSÁRIO para modificar em main
+
+EXEMPLO 3: Liberar memória
+───────────────────────────
+liberarInventario(&inventario);
+                  ↑
+                  & NECESSÁRIO para fazer inventario = NULL
+
+EXEMPLO 4: Gerenciar inventário
+────────────────────────────────
+gerenciarInventario(jogador, &inventario);
+                              ↑
+                              & NECESSÁRIO para modificar lista
+
+
+=====================================
+COMPARAÇÃO: COM E SEM &
+=====================================
+
+SEM & (CÓPIA):
+──────────────
+
+void adicionarItem(NoLista* lista, ItemVida item) {
+    // lista é uma CÓPIA do inventario
+    // Modificações NÃO afetam main!
+    lista = novo_no;  ← Só modifica a cópia local
+}
+
+main() {
+    NoLista* inventario = NULL;
+    adicionarItem(inventario, item);  ← Sem &
+    // inventario AINDA é NULL!  BUG!
+}
+
+
+COM & (REFERÊNCIA):
+────────────────────
+
+void adicionarItem(NoLista** lista_head, ItemVida item) {
+    // lista_head aponta para o inventario original
+    // Modificações AFETAM main!
+    *lista_head = novo_no;  ← Modifica o original
+}
+
+main() {
+    NoLista* inventario = NULL;
+    adicionarItem(&inventario, item);  ← Com &
+    // inventario agora aponta para novo_no!  CERTO!
+}
+
+
+=====================================
+RESUMO: OPERADOR &
+=====================================
+
+✅ & = Pega o ENDEREÇO de uma variável
+✅ Use & quando quer MODIFICAR uma variável em outra função
+✅ Use & com scanf() para ler valores
+✅ Use & para criar PONTEIROS
+✅ Use & para PONTEIROS DUPLOS (**)
+
+SINTAXE RÁPIDA:
+    int x = 10;
+    int* p = &x;        ← & pega endereço
+    scanf("%d", &x);    ← & para scanf escrever
+    funcao(&x);         ← & para modificar em funcao
+
+NO SEU CÓDIGO:
+    adicionarItensIniciais(&inventario);    ← Com &
+    liberarInventario(&inventario);         ← Com &
+    gerenciarInventario(jogador, &inv);     ← Com &
+    scanf(" %c", &opcao);                   ← Com &

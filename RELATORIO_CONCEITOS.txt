@@ -1,0 +1,350 @@
+﻿RELATÓRIO DE CONCEITOS - RPG DA VIDA EM C
+
+=====================================
+EXPLICAÇÃO BÁSICA
+=====================================
+
+O QUE SÃO STRUCTS?
+------------------
+Struct = Container que agrupa múltiplos dados relacionados
+Analógico: Uma mochila que guarda todos seus pertences em um só lugar
+Serve para: Organizar dados que pertencem juntos
+Vantagem: Em vez de 10 variáveis soltas, você tem 1 struct com 10 campos
+
+O QUE SÃO FUNÇÕES?
+------------------
+Função = Um bloco de código que executa uma tarefa específica
+Analógico: Uma receita de bolo - você segue os passos e sai um bolo pronto
+Serve para: Evitar repetir o mesmo código várias vezes
+Vantagem: Código mais organizado, reutilizável e fácil de entender
+
+O QUE SÃO PONTEIROS?
+--------------------
+Ponteiro = Uma variável que armazena o ENDEREÇO de outra variável na memória
+Analógico: Em vez de guardar um livro, você guarda o endereço da biblioteca
+Serve para: Acessar dados sem copiar, modificar dados em outro lugar
+Símbolos: * (asterisco) para declarar, -> (seta) para acessar campos
+
+=====================================
+ STRUCTS (3 principais)
+=====================================
+
+1. STRUCT PERSONAGEM
+   
+   LOCALIZAÇÃO: personagem.h linhas 7-15
+   
+   O QUE FAZ: Armazena TODOS os dados do jogador em um único lugar
+   SERVE PARA: Guardar nome, saúde, felicidade, dinheiro, idade, etc.
+   EXEMPLO PRÁTICO: Em vez de ter 8 variáveis soltas, você tem 1 struct
+   
+   typedef struct {
+       char nome[50];               // Nome do jogador
+       int saude;                   // Saúde (0-100)
+       int felicidade;              // Felicidade (0-100)
+       int dinheiro;                // Quantidade em R$
+       int ano_atual;               // Idade do personagem
+       int rodadas_sem_dinheiro;    // Contador para falência
+       int casado;                  // 0=solteiro, 1=casado
+       int filhos;                  // Quantidade de filhos
+   } Personagem;
+   
+   ONDE APARECE em main.c linha 62:
+   Personagem* jogador = criarPersonagem();
+   
+   O QUE ACONTECE: Cria um personagem e carrega TODOS seus dados na struct
+
+
+2. STRUCT ITEMVIDA
+   
+   LOCALIZAÇÃO: inventario.h linhas 11-17
+   
+   O QUE FAZ: Define os dados de um item que o jogador pode usar
+   SERVE PARA: Armazenar nome, tipo, efeitos do item
+   EXEMPLO PRÁTICO: Um item "Poção de Vida" tem nome, valor, efeitos
+   
+   typedef struct {
+       char nome[100];              // Ex: "Remédio Barato"
+       int valor;                   // Preço em dinheiro
+       char tipo[50];               // "consumível", "permanente"
+       int efeito_saude;            // +15 saúde
+       int efeito_felicidade;       // +10 felicidade
+       int efeito_dinheiro;         // +1000 dinheiro
+   } ItemVida;
+   
+   ONDE APARECE em inventario.c linha 149:
+   ItemVida item1 = criarItem("Remedio Barato", 50, "consumivel", 15, 0, 0);
+   
+   O QUE ACONTECE: Cria um item com todos seus atributos definidos
+
+
+3. STRUCT NOLISTA
+   
+   LOCALIZAÇÃO: inventario.h linhas 20-23
+   
+   O QUE FAZ: Conecta itens em uma sequência (cria uma lista ligada)
+   SERVE PARA: Fazer uma lista de itens encadeados
+   EXEMPLO PRÁTICO: Poção1  Chocolate  Dinheiro (ligados um após outro)
+   
+   typedef struct NoLista {
+       ItemVida item;               // O item guardado aqui
+       struct NoLista* proximo;     // Ponteiro para o próximo item
+   } NoLista;
+   
+   ONDE APARECE em inventario.c linha 10:
+   NoLista* novo_no = (NoLista*) malloc(sizeof(NoLista));
+   
+   O QUE ACONTECE: Cria um novo nó para adicionar à lista de itens
+
+=====================================
+ FUNÇÕES (3 essenciais)
+=====================================
+
+1. FUNÇÃO criarPersonagem()
+   
+   LOCALIZAÇÃO: personagem.c linhas 8-30
+   
+   O QUE FAZ: Cria um novo personagem e inicializa todos seus dados
+   SERVE PARA: Criar o jogador no início do jogo com valores padrão
+   RECEBE: Nada
+   RETORNA: Um PONTEIRO para a struct Personagem criada
+   
+   Código simplificado:
+   Personagem* criarPersonagem() {
+       // Aloca memória para um novo personagem
+       Personagem* p = (Personagem*) malloc(sizeof(Personagem));
+       
+       // Pede o nome do jogador
+       printf("Qual eh o seu nome? ");
+       fgets(p->nome, sizeof(p->nome), stdin);
+       
+       // Define os valores iniciais
+       p->saude = 100;              // Começa com 100% saúde
+       p->felicidade = 100;         // Começa com 100% felicidade
+       p->dinheiro = 1000;          // Começa com R$ 1000
+       p->ano_atual = 1;            // Começa aos 1 ano
+       p->casado = 0;               // Começa solteiro
+       p->filhos = 0;               // Sem filhos no início
+       
+       return p;  // Retorna o endereço do personagem criado
+   }
+   
+   ONDE É CHAMADA em main.c linha 62:
+   Personagem* jogador = criarPersonagem();
+   
+   RESULTADO: Um jogador completamente inicializado pronto para jogar
+
+
+2. FUNÇÃO exibirStatus()
+   
+   LOCALIZAÇÃO: personagem.c linhas 39-55
+   
+   O QUE FAZ: Mostra na tela os dados atuais do personagem
+   SERVE PARA: O jogador ver sua saúde, felicidade, dinheiro, estado civil
+   RECEBE: Um PONTEIRO para o personagem (p->)
+   RETORNA: Nada (void = não retorna nada)
+   
+   Código simplificado:
+   void exibirStatus(Personagem* p) {
+       if (p == NULL) return;
+       
+       // Mostra os dados na tela em formato formatado
+       printf("\n================================\n");
+       printf("    %s - %d ANOS\n", p->nome, p->ano_atual);
+       printf("================================\n");
+       printf(" Saude:       %d%%\n", p->saude);
+       printf(" Felicidade:  %d%%\n", p->felicidade);
+       printf(" Dinheiro:    R$ %d\n", p->dinheiro);
+       printf(" Estado civil: %s\n", p->casado ? "Casado(a)" : "Solteiro(a)");
+       if (p->filhos > 0) {
+           printf(" Filhos:      %d\n", p->filhos);
+       }
+       printf("================================\n");
+   }
+   
+   ONDE É CHAMADA em main.c linha 94:
+   exibirStatus(jogador);
+   
+   RESULTADO: Mostra na tela algo como:
+   ================================
+       João - 20 ANOS
+   ================================
+    Saude:       100%
+    Felicidade:  100%
+    Dinheiro:    R$ 1000
+    Estado civil: Solteiro(a)
+   ================================
+
+
+3. FUNÇÃO aplicarEvento()
+   
+   LOCALIZAÇÃO: personagem.c linhas 57-68
+   
+   O QUE FAZ: Modifica os atributos do personagem (saúde, felicidade, dinheiro)
+   SERVE PARA: Aplicar as consequências das decisões do jogador
+   RECEBE: Ponteiro para personagem + valores a modificar
+   RETORNA: Nada (void)
+   
+   Código simplificado:
+   void aplicarEvento(Personagem* p, int mod_saude, int mod_felicidade, int mod_dinheiro) {
+       if (p == NULL) return;
+       
+       // Modifica os valores do personagem
+       p->saude += mod_saude;              // Adiciona/subtrai saúde
+       p->felicidade += mod_felicidade;    // Adiciona/subtrai felicidade
+       p->dinheiro += mod_dinheiro;        // Adiciona/subtrai dinheiro
+       
+       // Limita os valores entre 0 e 100
+       if (p->saude > 100) p->saude = 100;
+       if (p->felicidade > 100) p->felicidade = 100;
+       if (p->saude < 0) p->saude = 0;
+       if (p->felicidade < 0) p->felicidade = 0;
+   }
+   
+   ONDE É CHAMADA em main.c linha 183:
+   aplicarEvento(jogador, -5, -1, -200);
+   
+   O QUE ACONTECE: 
+   - Saúde diminui 5 pontos
+   - Felicidade diminui 1 ponto
+   - Dinheiro diminui R$ 200
+   - Valores são limitados entre 0-100
+
+=====================================
+ PONTEIROS (5+ usos)
+=====================================
+
+1. PONTEIRO PARA STRUCT - Personagem*
+   
+   LOCALIZAÇÃO: main.c linha 62
+   
+   O QUE FAZ: Armazena o ENDEREÇO de um personagem na memória
+   SERVE PARA: Passar o personagem para funções sem copiar tudo
+   SINTAXE: tipo* nome_variavel
+   
+   Personagem* jogador = criarPersonagem();
+   
+    * = "é um ponteiro para"
+    Personagem = tipo de dado apontado
+    jogador = nome da variável que guarda o endereço
+   
+   EXEMPLO DE ALOCAÇÃO em personagem.c linha 9:
+   Personagem* p = (Personagem*) malloc(sizeof(Personagem));
+    malloc() aloca espaço na memória e retorna o endereço
+
+
+2. ACESSO VIA PONTEIRO - Operador ->
+   
+   LOCALIZAÇÃO: main.c linhas 99, 114, 144-145
+   
+   O QUE FAZ: Acessa campos da struct através do ponteiro
+   SERVE PARA: Ler ou modificar dados do personagem
+   SINTAXE: ponteiro->campo
+   
+   EXEMPLOS REAIS:
+   printf("%s\n", jogador->nome);    // LÊ o nome
+   jogador->saude = 0;                // MODIFICA a saúde
+   jogador->ano_atual += 5;           // INCREMENTA a idade
+   
+   EXEMPLO em personagem.c linha 48:
+   printf("    %s - %d ANOS\n", p->nome, p->ano_atual);
+    Acessa nome e ano_atual através do ponteiro p
+
+
+3. PONTEIRO PARA LISTA LIGADA - NoLista*
+   
+   LOCALIZAÇÃO: main.c linha 67
+   
+   O QUE FAZ: Aponta para o primeiro item do inventário
+   SERVE PARA: Acessar toda a lista de itens encadeados
+   
+   NoLista* inventario = NULL;
+   
+    Começa vazio (NULL)
+    Quando adiciona item, aponta para o primeiro
+    Cada nó aponta para o próximo (cria uma corrente)
+   
+   VISUALIZAÇÃO:
+   inventario  Poção  Chocolate  Dinheiro  NULL
+
+
+4. PASSAGEM POR REFERÊNCIA - &
+   
+   LOCALIZAÇÃO: main.c linha 73
+   
+   O QUE FAZ: Passa o ENDEREÇO de uma variável para uma função
+   SERVE PARA: Permitir que a função modifique a variável original
+   SINTAXE: &variavel (o & significa "endereço de")
+   
+   adicionarItensIniciais(&inventario);
+   
+    & = "pegue o endereço de inventario"
+    Passa o endereço para a função poder modificar
+   
+   EXEMPLO em inventario.c linha 147:
+   void adicionarItensIniciais(NoLista** lista_head) {
+       // lista_head é um ponteiro para um ponteiro
+       // Pode modificar a lista original
+       ItemVida item1 = criarItem("Remedio Barato", 50, "consumivel", 15, 0, 0);
+       adicionarItem(lista_head, item1);
+   }
+
+
+5. LIBERAÇÃO DE MEMÓRIA - free()
+   
+   LOCALIZAÇÃO: personagem.c linha 35 e inventario.c linha 84
+   
+   O QUE FAZ: Libera a memória que foi alocada com malloc()
+   SERVE PARA: Evitar vazamento de memória (memory leak)
+   SINTAXE: free(ponteiro)
+   
+   EXEMPLO em personagem.c linhas 33-36:
+   void liberarPersonagem(Personagem* p) {
+       if (p != NULL) {
+           free(p);  // Libera a memória do ponteiro
+       }
+   }
+   
+   EXEMPLO em inventario.c linhas 81-90:
+   void liberarInventario(NoLista** lista_head) {
+       NoLista* atual = *lista_head;
+       NoLista* proximo;
+       
+       while (atual != NULL) {
+           proximo = atual->proximo;
+           free(atual);       // Libera cada nó
+           atual = proximo;
+       }
+       *lista_head = NULL;
+   }
+   
+   CHAMADAS em main.c linhas 210-211:
+   liberarInventario(&inventario);
+   liberarPersonagem(jogador);
+
+=====================================
+RESUMO VISUAL
+=====================================
+
+STRUCTS:    Cont ainers que agrupam dados relacionados
+            Personagem = nome + saúde + felicidade + dinheiro + ...
+            Cada struct é um pacote completo de informações
+
+FUNÇÕES:    Blocos de código que realizam tarefas específicas
+            criarPersonagem() = cria e inicializa um personagem
+            exibirStatus() = mostra dados na tela
+            aplicarEvento() = modifica dados baseado em ações
+
+PONTEIROS:  Endereços de dados na memória
+            Personagem* jogador = endereço do personagem
+            jogador->saude = acessa o campo saúde via ponteiro
+            &inventario = passa o endereço para modificar
+
+=====================================
+ REQUISITOS ATENDIDOS
+=====================================
+ 3 structs com explicação básica + exemplo
+ 3 funções com localização + propósito + código
+ 5+ ponteiros com casos de uso prático
+ Explicações simples e objetivas
+ Analogias para fácil compreensão
+ Exemplos de código real do projeto

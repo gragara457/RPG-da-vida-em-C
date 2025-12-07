@@ -1,0 +1,237 @@
+=====================================
+PONTEIROS DUPLOS (**) NO CÓDIGO
+=====================================
+
+O QUE É UM PONTEIRO DUPLO?
+--------------------------
+Ponteiro Duplo = Um ponteiro que aponta para OUTRO PONTEIRO
+Analógico: Em vez de guardar um livro, você guarda o ENDEREÇO DE QUEM GUARDA O LIVRO
+
+Sintaxe: tipo** nome_variavel
+
+VISUALIZAÇÃO:
+    
+    Memória:
+    ┌─────────────────────────────────────────┐
+    │ Endereço: 5000                          │  ← lista_head aponta aqui
+    │ Valor: 7000                             │     (contém um endereço)
+    └──────────┬────────────────────────────────┘
+               │
+               └──→ Endereço: 7000
+                    Valor: { item, proximo }   ← NoLista (um nó da lista)
+
+
+=====================================
+ONDE ESTÁ SENDO USADO NO CÓDIGO?
+=====================================
+
+LOCALIZAÇÃO 1: inventario.c - Função adicionarItem()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Linhas 7-26:
+
+void adicionarItem(NoLista** lista_head, ItemVida item) {
+    //                     ^^
+    //                     Ponteiro duplo!
+
+    NoLista* novo_no = (NoLista*) malloc(sizeof(NoLista));
+    
+    // Adiciona o novo nó no INÍCIO da lista
+    if (*lista_head == NULL) {  // Desreferencia: * acessa o valor
+        *lista_head = novo_no;  // Modifica a lista original!
+    } else {
+        novo_no->proximo = *lista_head;
+        *lista_head = novo_no;
+    }
+}
+
+COMO FUNCIONA:
+──────────────
+
+1. CHAMADA em main.c linha 73:
+   
+   NoLista* inventario = NULL;
+   adicionarItensIniciais(&inventario);
+                          ↑
+                    Passa o ENDEREÇO do ponteiro
+   
+   O que é passado:
+   - inventario é um ponteiro (contém um endereço)
+   - &inventario é o endereço DESSE ponteiro
+   - &inventario é do tipo NoLista**
+
+2. DENTRO DA FUNÇÃO:
+   
+   void adicionarItem(NoLista** lista_head, ...) {
+                      ^^^^^^^
+                      Recebe um ponteiro duplo
+   
+   *lista_head = novo_no;
+   ^^^^^^^^^^^
+   * = Desreferencia (acessa o valor)
+   
+   Significado:
+   - lista_head    = endereço do ponteiro inventario
+   - *lista_head   = o próprio inventario
+   - *lista_head = novo_no  =  inventario = novo_no
+
+
+VISUALIZAÇÃO DO PROCESSO:
+───────────────────────────
+
+ANTES DE CHAMAR adicionarItem():
+    
+    main():
+        inventario = NULL
+        
+        
+DEPOIS DE CHAMAR adicionarItem(&inventario):
+    
+    inventario agora aponta para um nó!
+    Porque a função MODIFICOU o valor através de **lista_head
+
+
+=====================================
+LOCALIZAÇÃO 2: inventario.c - Função liberarInventario()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Linhas 83-93:
+
+void liberarInventario(NoLista** lista_head) {
+                               ^^
+                               Ponteiro duplo!
+    
+    NoLista* atual = *lista_head;  // Desreferencia: pega o primeiro nó
+    
+    while (atual != NULL) {
+        NoLista* proximo = atual->proximo;
+        free(atual);  // Libera a memória do nó
+        atual = proximo;
+    }
+    
+    *lista_head = NULL;  // Desreferencia: marca que lista está vazia
+}
+
+POR QUE USA PONTEIRO DUPLO?
+─────────────────────────────
+
+SEM ponteiro duplo:
+    
+    void liberarInventario(NoLista* lista) {
+        // ... libera os nós ...
+        // Mas NÃO consegue fazer lista = NULL em main!
+    }
+    
+    Em main, inventario AINDA apontaria para memória liberada!
+    Isso é um BUG!
+
+COM ponteiro duplo:
+    
+    void liberarInventario(NoLista** lista_head) {
+        // ... libera os nós ...
+        *lista_head = NULL;  // Consegue modificar em main!
+    }
+    
+    Em main, inventario FICA NULL!
+    Seguro!
+
+
+=====================================
+LOCALIZAÇÃO 3: Outras Funções
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+inventario.h - Protótipos:
+    - adicionarItem(NoLista** lista_head, ItemVida item)
+    - removerItem(NoLista** lista_head, const char* nome)
+    - liberarInventario(NoLista** lista_head)
+    - usarItem(NoLista** lista_head, ...)
+    - adicionarItensIniciais(NoLista** lista_head)
+
+arvore_decisao.c:
+    - gerenciarInventario(Personagem* p, NoLista** inventario)
+    - exibirMenuPrincipal(Personagem* p, NoLista** inventario)
+
+main.c:
+    - adicionarItensIniciais(&inventario)   ← Passa &
+    - liberarInventario(&inventario)         ← Passa &
+    - gerenciarInventario(jogador, &inventario)  ← Passa &
+
+
+=====================================
+RESUMO: PONTEIRO DUPLO NA PRÁTICA
+=====================================
+
+PROBLEMA:
+─────────
+Preciso de uma função que MODIFIQUE um ponteiro em main()
+
+SOLUÇÃO:
+────────
+Usar ponteiro duplo **
+
+EXEMPLO REAL DO CÓDIGO:
+───────────────────────
+
+main.c:
+    NoLista* inventario = NULL;              ← Ponteiro simples
+    adicionarItensIniciais(&inventario);     ← Passa o ENDEREÇO
+    
+inventario.c:
+    void adicionarItensIniciais(NoLista** lista_head) {
+        //                              ^^
+        //                    Recebe endereço do ponteiro
+        
+        // Consegue MODIFICAR o inventario original em main!
+        *lista_head = novo_no;  ← Modificação funciona
+    }
+
+RESULTADO em main:
+    inventario agora aponta para a lista!
+    (modificado pela função adicionarItensIniciais)
+
+
+=====================================
+DIFERENÇA: * vs **
+=====================================
+
+PONTEIRO SIMPLES (*):
+    
+    int x = 10;
+    int* p = &x;      ← p aponta para x
+    *p = 20;           ← Modifica x
+    
+    void modificar(int* ponteiro) {
+        *ponteiro = 30;  ← Modifica o int original
+    }
+
+PONTEIRO DUPLO (**):
+    
+    int x = 10;
+    int* p = &x;
+    int** pp = &p;     ← pp aponta para p
+    **pp = 40;         ← Modifica x
+    *pp = outro_p;     ← Modifica p (faz p apontar para outra coisa!)
+    
+    void modificarPonteiro(int** ponteiro) {
+        *ponteiro = &y;  ← Modifica para onde p aponta!
+    }
+
+
+=====================================
+CONCLUSÃO
+=====================================
+
+✅ Ponteiro duplo (**lista_head) é usado quando:
+   1. Precisa MODIFICAR um ponteiro dentro de uma função
+   2. Trabalha com LISTA LIGADA (início muda)
+   3. Libera MEMÓRIA (precisa fazer NULL)
+
+✅ No seu código RPG:
+   - adicionarItem() usa ** para inserir no início
+   - liberarInventario() usa ** para zerar a lista
+   - Todas funções de inventário usam ** por este motivo
+
+✅ A sintaxe:
+   - Declaração: NoLista** lista_head
+   - Chamada: funcao(&inventario)
+   - Uso: *lista_head = novo_valor
